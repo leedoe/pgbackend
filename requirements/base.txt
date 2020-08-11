@@ -1,0 +1,7 @@
+pytz==2020.1
+django==3.0.5  # pyup: < 3.1  # https://www.djangoproject.com/
+djangorestframework==3.11.0
+boto3==1.14.17
+djangorestframework-jwt==1.11.0
+django-environ==0.4.5
+django-filter
