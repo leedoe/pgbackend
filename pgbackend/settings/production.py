@@ -49,3 +49,8 @@ LOGGING = {
         },
     },
 }
+
+CORS_ORIGIN_WHITELIST = env.list(
+    "DJANGO_CORS_ORIGIN_WHITELIST",
+    default=["example.com"]
+)

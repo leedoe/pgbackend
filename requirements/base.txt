@@ -5,3 +5,4 @@ boto3==1.14.17
 djangorestframework-jwt==1.11.0
 django-environ==0.4.5
 django-filter
+django-cors-headers
