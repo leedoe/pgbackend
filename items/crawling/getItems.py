@@ -3,6 +3,7 @@ import pprint
 import environ
 import os
 import sys
+import re
 from pathlib import Path
 
 import requests
@@ -297,6 +298,53 @@ def getItemsFromLeatherfeel():
     return itemData
 
 
+def getItemsFromSeiwa():
+    headers = {
+        'User-Agent': 'PostmanRuntime/7.26.2'
+    }
+    itemData = []
+    categories = ['103']
+
+    for category in categories:
+        pageNumber = 1
+        while True:
+            response = requests.get(
+                f'https://seiwa-net.kr/product/list.html?cate_no={category}&page={pageNumber}',
+                headers=headers)
+            soup = bs(response.text, 'lxml')
+            itemsUl = soup.find('ul', class_='prdList grid5')
+            if itemsUl is None:
+                break
+            itemsLi = itemsUl.find_all('li', id=re.compile('anchorBoxId_*'))
+
+            for itemli in itemsLi:
+                itemImg = f'https:{itemli.find("img")["src"]}'
+                itemName = itemli.find("img")["alt"]
+                try:
+                    price = itemli.find_all('span', attrs={'style': 'font-size:13px;color:#000000;font-weight:bold;'})[1]
+                    itemPrice = price.text.replace('원', '').replace(',', '')
+                except IndexError:
+                    continue
+                link = f'https://seiwa-net.kr{itemli.find("a")["href"]}'
+                soldout = itemli.find('img', attrs={'alt': '품절'})
+                if soldout is None:
+                    soldout = False
+                else:
+                    soldout = True
+
+                itemData.append({
+                    'image': itemImg,
+                    'title': itemName,
+                    'price': itemPrice,
+                    'link': link,
+                    'soldout': soldout,
+                    'homepage': '세이와'
+                })
+            pageNumber += 1
+    return itemData
+
+
+
 items = []
 items += getItemsFromMyLeatherTool()
 items += getItemsFromLeathercraftTool()
@@ -304,12 +352,14 @@ items += getItemsFromLeatherNori()
 items += getItemsFromKingsLeather()
 items += getItemsFromGoodNLeather()
 items += getItemsFromLeatherfeel()
+items += getItemsFromSeiwa()
 
 # print(len(items))
 # with open('./items.json', 'w', encoding='utf8') as fp:
 #     json.dump(items, fp, ensure_ascii=False)
 
 
+####
 PROJECT_ROOT = Path(os.path.realpath(__file__)).parent.parent
 sys.path.append(os.path.dirname(PROJECT_ROOT))
 # print(sys.path)
