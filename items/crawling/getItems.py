@@ -161,7 +161,6 @@ def getItemsFromKingsLeather():
     pageNumber = 1
 
     while True:
-        print(pageNumber)
         response = requests.get(
             f'http://www.campnews.co.kr/shop/goods/goods_search.php?searched=Y&page={pageNumber}',
             headers=headers)
