@@ -1,4 +1,4 @@
-from config.settings.base import env
+from pgbackend.settings.base import env
 from django.http.response import JsonResponse
 from django.views.generic.base import View
 

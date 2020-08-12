@@ -27,6 +27,7 @@ from board.api.views import CommentViewSet, PostViewSet
 from stores.api.views import StoreViewSet
 from users.api.views import UserViewSet
 from items.api.views import ItemListViewSet
+from stores.views import AddressFromNaver
 
 
 router = DefaultRouter()
@@ -38,6 +39,7 @@ router.register(r'items', ItemListViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/address/', AddressFromNaver.as_view()),
     # path('users/', include("users.urls")),
     path('api-token-auth/', TokenObtainPairView.as_view()),
     path('api-token-refresh/', TokenRefreshView.as_view()),
