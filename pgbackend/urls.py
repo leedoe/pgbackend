@@ -20,6 +20,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework_jwt.views import refresh_jwt_token
 from rest_framework_jwt.views import verify_jwt_token
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from users.api.views import UserViewSet
 from board.api.views import CommentViewSet, PostViewSet
@@ -38,8 +39,8 @@ router.register(r'items', ItemListViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('users/', include("users.urls")),
-    path('api-token-auth/', obtain_jwt_token),
-    path('api-token-auth/refresh/', refresh_jwt_token),
-    path('api-token-verify/', verify_jwt_token),
+    path('api-token-auth/', TokenObtainPairView.as_view()),
+    path('api-token-refresh/', TokenRefreshView.as_view()),
+    path('api-token-verify/', TokenVerifyView.as_view()),
     path(r"api/", include(router.urls))
 ]

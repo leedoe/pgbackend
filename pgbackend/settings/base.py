@@ -1,6 +1,7 @@
 import os
 import environ
 import datetime
+from datetime import timedelta
 
 env = environ.Env()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -118,7 +119,8 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny",
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
     ),
@@ -130,8 +132,9 @@ REST_FRAMEWORK = {
     ]
 }
 
-JWT_AUTH = {
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=30),
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,
+    'AUTH_HEADER_TYPES': ('JWT',)
 }
