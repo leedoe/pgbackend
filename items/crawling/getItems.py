@@ -1,7 +1,14 @@
 import json
+import pprint
+import environ
+import os
+import sys
+from pathlib import Path
 
 import requests
 from bs4 import BeautifulSoup as bs
+import django
+from django.conf import settings
 
 
 def getItemsFromMyLeatherTool():
@@ -71,6 +78,8 @@ def getItemsFromLeathercraftTool():
             soup = bs(response.text, 'lxml')
             itemsListUl = soup.find_all('ul', class_='prdList')
             if itemsListUl is None:
+                break
+            if len(itemsListUl) == 0:
                 break
 
             if len(itemsListUl) != 1:
@@ -296,6 +305,37 @@ items += getItemsFromKingsLeather()
 items += getItemsFromGoodNLeather()
 items += getItemsFromLeatherfeel()
 
-print(len(items))
-with open('./items.json', 'w', encoding='utf8') as fp:
-    json.dump(items, fp, ensure_ascii=False)
+# print(len(items))
+# with open('./items.json', 'w', encoding='utf8') as fp:
+#     json.dump(items, fp, ensure_ascii=False)
+
+
+PROJECT_ROOT = Path(os.path.realpath(__file__)).parent.parent
+sys.path.append(os.path.dirname(PROJECT_ROOT))
+# print(sys.path)
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pgbackend.settings.local")
+env = environ.Env()
+
+# settings.configure(default_settings=env('DJANGO_SETTINGS_MODULE'), DEBUG=True)
+django.setup()
+
+from items.models import Item
+from users.models import User
+
+# with open('./items/crawling/items.json', 'r', encoding='utf8') as fp:
+#     items = json.load(fp)
+
+Item.objects.all().delete()
+item_instances = []
+for item in items:
+    item_instances.append(Item(
+        name=item['title'],
+        thumbnail=item['image'],
+        price=item['price'],
+        link=item['link'],
+        soldout=item['soldout'],
+        store_name=item['homepage']
+    ))
+
+Item.objects.bulk_create(item_instances)
