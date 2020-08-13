@@ -1,11 +1,12 @@
 import os
 import environ
-import datetime
 from datetime import timedelta
+from pathlib import Path
 
 env = environ.Env()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 DEBUG = env.bool("DJANGO_DEBUG", False)
 
@@ -20,6 +21,8 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(ROOT_DIR, "staticfiles")
 
 DJANGO_APPS = [
     'django.contrib.admin',
