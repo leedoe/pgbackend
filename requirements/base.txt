@@ -9,3 +9,4 @@ django-cors-headers
 requests
 beautifulsoup4
 lxml
+argon2-cffi
