@@ -38,7 +38,7 @@ class Leather(models.Model):
     ]
 
     name = models.CharField(max_length=150)
-    tanery = models.ForeignKey(Tannery, on_delete=models.CASCADE)
+    tannery = models.ForeignKey(Tannery, on_delete=models.CASCADE)
     tanning_method = models.IntegerField(choices=TANNING_METHOD)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     explanation = models.TextField()
