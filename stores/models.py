@@ -19,3 +19,6 @@ class Store(models.Model):
     homepage = models.URLField(null=True, blank=True, max_length=300)
     blog = models.URLField(null=True, blank=True, max_length=300)
     instagram = models.URLField(null=True, blank=True, max_length=300)
+
+    def __str__(self):
+        return self.name

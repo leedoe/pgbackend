@@ -18,10 +18,16 @@ class Tannery(models.Model):
     nationality = models.CharField(max_length=100)
     explanation = models.TextField()
 
+    def __str__(self):
+        return self.name
+
 
 class Material(models.Model):
     name = models.CharField(max_length=100)
     explanation = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 
 class Leather(models.Model):
@@ -37,9 +43,15 @@ class Leather(models.Model):
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     explanation = models.TextField()
 
+    def __str__(self):
+        return self.name
+
 
 class LeatherDetail(models.Model):
     leather = models.ForeignKey(Leather, on_delete=models.CASCADE)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    store = models.ForeignKey(
+        Store,
+        on_delete=models.CASCADE,
+        limit_choices_to={'category': 2})
     price = models.IntegerField()
     note = models.TextField()
