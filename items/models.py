@@ -48,7 +48,10 @@ class Leather(models.Model):
 
 
 class LeatherDetail(models.Model):
-    leather = models.ForeignKey(Leather, on_delete=models.CASCADE)
+    leather = models.ForeignKey(
+        Leather,
+        on_delete=models.CASCADE,
+        related_name='leather_details')
     store = models.ForeignKey(
         Store,
         on_delete=models.CASCADE,
