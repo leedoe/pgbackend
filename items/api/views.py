@@ -1,9 +1,9 @@
 from items.api.paginations import ItemsSetPagination
-from items.api.serializers import ItemSerializer
+from items.api.serializers import ItemSerializer, LeatherSerializer
 from rest_framework import mixins, viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
 
-from items.models import Item
+from items.models import Item, Leather
 
 
 class ItemListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -13,4 +13,9 @@ class ItemListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     filter_backends = [filters.SearchFilter]
     # filterset_fields = ['name']
     search_fields = ['name']
+    
+
+class LeatherViewset(viewsets.ModelViewSet):
+    queryset = Leather.objects.all()
+    serializer_class = LeatherSerializer
     

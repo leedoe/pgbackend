@@ -23,7 +23,7 @@ from users.api.views import UserViewSet
 from board.api.views import CommentViewSet, PostViewSet
 from stores.api.views import StoreViewSet
 from users.api.views import UserViewSet
-from items.api.views import ItemListViewSet
+from items.api.views import ItemListViewSet, LeatherViewset
 from stores.views import AddressFromNaver
 
 
@@ -33,6 +33,7 @@ router.register(r'posts', PostViewSet)
 router.register(r'comments', CommentViewSet)
 router.register(r'stores', StoreViewSet)
 router.register(r'items', ItemListViewSet)
+router.register(r'leathers', LeatherViewset)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
