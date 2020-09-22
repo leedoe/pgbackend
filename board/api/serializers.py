@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-from board.models import Comment, Post
+from board.models import Category, Comment, Post
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -28,6 +34,7 @@ class PostSerializer(serializers.ModelSerializer):
             'pk',
             'title',
             'content',
+            'password',
             'writer_name',
             'writer',
             'category',

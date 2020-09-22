@@ -9,5 +9,6 @@ class StoreViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = StoreSerializer
     filterset_fields = {
         'x': ['gte', 'lte'],
-        'y': ['gte', 'lte']
+        'y': ['gte', 'lte'],
+        'category': ['exact']
     }

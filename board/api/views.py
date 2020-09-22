@@ -8,13 +8,14 @@ from django.db.models import Count
 from django.db.models.query_utils import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, status
+from rest_framework import mixins
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 
-from board.models import Comment, Post
+from board.models import Category, Comment, Post
 
-from .serializers import CommentSerializer, PostListSerializer, PostRetrieveSerializer, PostSerializer
+from .serializers import CategorySerializer, CommentSerializer, PostListSerializer, PostRetrieveSerializer, PostSerializer
 from .permissions import IsWriterOnly
 from .paginations import PostsSetPagination
 
@@ -43,6 +44,24 @@ class PostViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['noticed']
     search_fields = ['content', 'writer_name', 'comment__content']
+
+    def get_queryset(self):
+        if self.action == 'list':
+            if self.request.query_params.get('category__name', None) is None:
+                queryset = Post.objects.filter(deleted=False) \
+                    .exclude(category__name='건의') \
+                    .annotate(comment_count=Count('comment', filter=Q(comment__deleted=False))) \
+                    .order_by('-created_time')
+            else:
+                queryset = Post.objects.filter(deleted=False, category__name='건의') \
+                    .annotate(comment_count=Count('comment', filter=Q(comment__deleted=False))) \
+                    .order_by('-created_time')
+        else:
+            queryset = Post.objects.filter(deleted=False) \
+                    .annotate(comment_count=Count('comment', filter=Q(comment__deleted=False))) \
+                    .order_by('-created_time')
+
+        return queryset
 
     def making_object(bucket_name, base64):
         env = environ.Env()
@@ -95,11 +114,11 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        content = json.loads(request.data['content'])
+        content = request.data['content']
 
         content = self.base642Image(content)
 
-        request.data['content'] = json.dumps(content)
+        request.data['content'] = content
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -107,9 +126,9 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
-        content = json.loads(request.data['content'])
+        content = request.data['content']
         content = self.base642Image(content)
-        request.data['content'] = json.dumps(content, ensure_ascii=False)
+        request.data['content'] = content
 
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
@@ -123,3 +142,11 @@ class PostViewSet(viewsets.ModelViewSet):
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data)
+
+
+class CategoryViewSet(
+        mixins.ListModelMixin,
+        viewsets.GenericViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    filterset_fields = ['name']

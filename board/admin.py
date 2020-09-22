@@ -5,6 +5,7 @@ from .models import Category, Comment, Post
 
 @admin.register(Post)
 class PostAdmim(admin.ModelAdmin):
+    list_display = ['pk', 'title', 'writer', 'writer_name']
     pass
 
 

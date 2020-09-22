@@ -13,13 +13,14 @@ class Category(models.Model):
 # Create your models here.
 class Post(models.Model):
     title = models.CharField(max_length=191)
-    content = models.TextField()
-    # image 첨부할 수 있게 필드 하나 필요함
+    content = models.JSONField()
     writer_name = models.CharField(max_length=191)
+    password = models.CharField(max_length=100, null=True, blank=True)
     writer = models.ForeignKey(
         User,
-        on_delete=models.SET_DEFAULT,
-        default=2)
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL)
     noticed = models.BooleanField(default=False)
     category = models.ForeignKey(
         Category,
@@ -44,10 +45,12 @@ class Comment(models.Model):
         null=True,
         blank=True)
     writer_name = models.CharField(max_length=191)
+    password = models.CharField(max_length=100, null=True, blank=True)
     writer = models.ForeignKey(
         User,
-        on_delete=models.SET_DEFAULT,
-        default=2)
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL)
     content = models.TextField()
     deleted = models.BooleanField(default=False)
     created_time = models.DateTimeField(auto_now_add=True)
