@@ -1,6 +1,6 @@
 pytz==2020.1
 django==3.1  # pyup: < 3.1  # https://www.djangoproject.com/
-djangorestframework==3.11.0
+djangorestframework
 boto3==1.14.17
 djangorestframework-simplejwt
 django-environ==0.4.5
