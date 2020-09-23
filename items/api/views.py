@@ -43,7 +43,7 @@ class LeatherViewset(mixins.ListModelMixin,
             url = upload_file(request.FILES['image'].file)
             data['image'] = url
         except Exception:
-            pass
+            data['image'] = None
 
         serializer = LeatherCreateSerializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -73,7 +73,7 @@ class TanneryViewset(mixins.ListModelMixin,
             url = upload_file(request.FILES['logo'].file)
             data['logo'] = url
         except Exception:
-            pass
+            data['logo'] = None
         
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -104,9 +104,8 @@ class MaterialViewset(mixins.ListModelMixin,
             url = upload_file(request.FILES['image'].file)
             data['image'] = url
         except Exception:
-            pass
+            data['image'] = None
         
-        print(data)
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -168,7 +167,7 @@ class LeatherDetailViewset(mixins.CreateModelMixin,
             url = upload_file(request.FILES['image'].file)
             data['image'] = url
         except Exception:
-            pass
+            data['image'] = None
             
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
