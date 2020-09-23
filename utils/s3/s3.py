@@ -8,9 +8,14 @@ from botocore.exceptions import ClientError
 
 
 def upload_file(imagefile):
+    env = environ.Env()
     key = f'{str(uuid.uuid4())}.jpg'
     
-    client = boto3.client('s3')
+    client = boto3.client(
+            's3',
+            aws_access_key_id=env('aws_access_key_id'),
+            aws_secret_access_key=env('aws_secret_access_key')
+        )
     try:
         client.upload_fileobj(
             imagefile,
