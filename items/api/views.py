@@ -104,9 +104,9 @@ class MaterialViewset(mixins.ListModelMixin,
             url = upload_file(request.FILES['image'].file)
             data['image'] = url
         except Exception:
-            print(data)
             pass
         
+        print(data)
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
