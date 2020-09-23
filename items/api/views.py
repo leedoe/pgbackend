@@ -10,6 +10,8 @@ from items.models import Item, Leather, LeatherDetail, Material, Tannery, Commen
 
 from utils.s3.s3 import upload_file
 
+import json
+
 
 class ItemListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     pagination_class = ItemsSetPagination
@@ -102,6 +104,7 @@ class MaterialViewset(mixins.ListModelMixin,
             url = upload_file(request.FILES['image'].file)
             data['image'] = url
         except Exception:
+            print(data)
             pass
         
         serializer = self.get_serializer(data=data)
