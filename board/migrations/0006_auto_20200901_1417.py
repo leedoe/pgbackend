@@ -11,11 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='comment',
-            name='content',
-            field=models.JSONField(),
-        ),
-        migrations.AlterField(
             model_name='post',
             name='content',
             field=models.JSONField(),

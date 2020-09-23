@@ -10,6 +10,8 @@ from items.models import Item, Leather, LeatherDetail, Material, Tannery, Commen
 
 from utils.s3.s3 import upload_file
 
+import json
+
 
 class ItemListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     pagination_class = ItemsSetPagination
@@ -41,7 +43,7 @@ class LeatherViewset(mixins.ListModelMixin,
             url = upload_file(request.FILES['image'].file)
             data['image'] = url
         except Exception:
-            pass
+            data['image'] = None
 
         serializer = LeatherCreateSerializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -71,7 +73,7 @@ class TanneryViewset(mixins.ListModelMixin,
             url = upload_file(request.FILES['logo'].file)
             data['logo'] = url
         except Exception:
-            pass
+            data['logo'] = None
         
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -102,7 +104,7 @@ class MaterialViewset(mixins.ListModelMixin,
             url = upload_file(request.FILES['image'].file)
             data['image'] = url
         except Exception:
-            pass
+            data['image'] = None
         
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -165,7 +167,7 @@ class LeatherDetailViewset(mixins.CreateModelMixin,
             url = upload_file(request.FILES['image'].file)
             data['image'] = url
         except Exception:
-            pass
+            data['image'] = None
             
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
